@@ -1,4 +1,4 @@
-package dataProvider;
+package main.dataProvider;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -9,7 +9,7 @@ import java.util.Properties;
 public class ConfigFileReader {
 	 
 	 private Properties properties;
-	 private final String propertyFilePath= "configs//configuration.properties";
+	 private final String propertyFilePath= "src//config//configuration.properties";
 	 
 	 
 	 public ConfigFileReader(){

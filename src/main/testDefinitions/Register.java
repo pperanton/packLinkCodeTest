@@ -1,6 +1,4 @@
-package testDefinitions;
-
-import dataProvider.ConfigFileReader;
+package main.testDefinitions;
 
 import java.util.Properties;
 
@@ -12,10 +10,10 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import cucumber.api.PendingException;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import main.dataProvider.ConfigFileReader;
 
 public class Register {
 	
@@ -94,9 +92,8 @@ public class Register {
 	}
  
 	 @Then("^select a value in the monthly field$")
-	 public void select_a_value_in_the_monthly_field() throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+	 public void select_a_value_in_the_monthly_field() {
+		 new Select(driver.findElement(By.xpath("//*[@id=\"register-shipments\"]"))).selectByValue("1 - 10");
 	 }
 
 	 @Then("^select a value in marketplace field$")
