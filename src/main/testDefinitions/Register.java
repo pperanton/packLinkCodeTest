@@ -19,9 +19,10 @@ public class Register {
 	
 	WebDriver driver;
 	WebDriverWait wait;
+	
 	ConfigFileReader configFileReader = new ConfigFileReader();
 
-	/* 1st try to implement a Before hook. I was commented since was not working as expected and I put a Background instead.
+	/* 1st try to implement a Before hook. I commented it since was not working as expected and I put a Background instead.
 	@Before("@webBrowser")
 	public void openBrowser() {
 		 System.setProperty("webdriver.chrome.driver", configFileReader.getChromeDriverPath());
@@ -80,15 +81,15 @@ public class Register {
 	}
 
 	@Then("^fill up the \"([^\"]*)\", \"([^\"]*)\" and  \"([^\"]*)\" field$")
-	public void fill_up_the_and_field(String arg1, String arg2, String arg3) {
+	public void fill_up_the_and_field(String email, String password, String phoneNumber) {
 		driver.findElement(By.xpath("//*[@id=\"register-email\"]")).clear(); //email field
-		driver.findElement(By.xpath("//*[@id=\"register-email\"]")).sendKeys(arg1); //email field
+		driver.findElement(By.xpath("//*[@id=\"register-email\"]")).sendKeys(email); //email field
 		
 		driver.findElement(By.xpath("//*[@id=\"register-password\"]")).clear(); //password field
-		driver.findElement(By.xpath("//*[@id=\"register-password\"]")).sendKeys(arg2); //password field
+		driver.findElement(By.xpath("//*[@id=\"register-password\"]")).sendKeys(password); //password field
 		
 		driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).clear(); //phoneNumber field
-		driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).sendKeys(arg3); //phoneNumber field;
+		driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).sendKeys(phoneNumber); //phoneNumber field;
 	}
  
 	 @Then("^select a value in the monthly field$")
@@ -97,111 +98,190 @@ public class Register {
 	 }
 
 	 @Then("^select a value in marketplace field$")
-	 public void select_a_value_in_marketplace_field() throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+	 public void select_a_value_in_marketplace_field() {
+		 new Select(driver.findElement(By.xpath("//*[@id=\"register-platform\"]"))).selectByValue("Other");
 	 }
 
 	 @Then("^select a value in onlinePlatform field$")
-	 public void select_a_value_in_onlinePlatform_field() throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+	 public void select_a_value_in_onlinePlatform_field() {
+		 new Select(driver.findElement(By.xpath("//*[@id=\"register-ecommerce\"]"))).selectByValue("Other");
 	 }
 
 	 @Then("^click on terms&conditions field$")
-	 public void click_on_terms_conditions_field() throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+	 public void click_on_terms_conditions_field() {
+		 driver.findElement(By.xpath("//*[@id=\"register-termsAndConditions\"]")).click();
 	 }
 
 	 @Then("^click on privacyPolicy field$")
-	 public void click_on_privacyPolicy_field() throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+	 public void click_on_privacyPolicy_field() {
+		 driver.findElement(By.xpath("//*[@id=\"register-dataProcessing\"]")).click();
 	 }
 
 	 @Then("^complete the registration process$")
 	 public void complete_the_registration_process() throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+		 driver.findElement(By.xpath("//*[@id=\"register-submit\"]")).click();
+		 
 	 }
 
 	 @Then("^validate dashboard is accesible$")
-	 public void validate_dashboard_is_accesible() throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+	 public void validate_dashboard_is_accesible() throws Throwable { 
+		Thread.sleep(5000);
+		driver.findElement(By.xpath("/html/body/div[1]/main-app/div[1]/app-header/header/h1/a"));
+		Thread.sleep(10000);
+		driver.quit();
 	 }
 
-	 @Given("^the registration form with (\\d+) required fields$")
-	 public void the_registration_form_with_required_fields(int arg1) throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+	 //Registration_KO_existingUser
+	 
+	 @Then("^fill up the email, password and  phoneNumber field with existing data$")
+	 public void fill_up_the_and_field_with_existing_data() throws Throwable {
+		 
+		 	driver.findElement(By.xpath("//*[@id=\"register-email\"]")).clear(); //email field
+			driver.findElement(By.xpath("//*[@id=\"register-email\"]")).sendKeys(configFileReader.getplProUser());//email field
+			
+			driver.findElement(By.xpath("//*[@id=\"register-password\"]")).clear(); //password field
+			driver.findElement(By.xpath("//*[@id=\"register-password\"]")).sendKeys(configFileReader.getplProPassword()); //password field
+			
+			driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).clear(); //phoneNumber field
+			driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).sendKeys("123456"); //phoneNumber field;
+	 }
+	 
+	 @Then("^an Already exists error will be displayed$")
+	 public void an_Already_exists_error_will_be_displayed() throws Throwable {
+		 Thread.sleep(2000);
+		 driver.findElement(By.xpath("//*[text()='Client already exists']"));
+		 driver.quit();
 	 }
 
-	 @When("^navigating to https://pro\\.packlink\\.es/login WITH credentials <email> and incorrect <password>$")
-	 public void navigating_to_https_pro_packlink_es_login_WITH_credentials_email_and_incorrect_password() throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+	 //Access_OK
+	 @Given("^navigating to https://pro\\.packlink\\.es/login$")
+	 public void navigating_to_https_pro_packlink_es_login() throws Throwable {
+			driver.get(configFileReader.getApplicationUrlHome());
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"login-form\"]/fieldset/legend")));
+
 	 }
 
+	 @Then("^I use existing data for credentials$")
+	 public void i_use_existing_data_for_credentials() throws Throwable {
+		 
+		 	driver.findElement(By.xpath("//*[@id=\"login-email\"]")).clear(); //email field
+			driver.findElement(By.xpath("//*[@id=\"login-email\"]")).sendKeys(configFileReader.getplProUser());//email field
+			
+			driver.findElement(By.xpath("//*[@id=\"login-password\"]")).clear(); //password field
+			driver.findElement(By.xpath("//*[@id=\"login-password\"]")).sendKeys(configFileReader.getplProPassword()); //password field
+	 }
+
+	//Access_KO
+	 @Then("^I enter not existing credentials email and incorrect password$")
+	 public void i_enter_not_existing_credentials_email_and_incorrect_password() throws Throwable {
+			driver.findElement(By.xpath("//*[@id=\"login-email\"]")).clear(); //email field
+			driver.findElement(By.xpath("//*[@id=\"login-email\"]")).sendKeys("qacandidate@packlink.es");//email field
+			
+			driver.findElement(By.xpath("//*[@id=\"login-password\"]")).clear(); //password field
+			driver.findElement(By.xpath("//*[@id=\"login-password\"]")).sendKeys("2222222222"); //password field
+	 }
+	 
 	 @Then("^login error will be displayed$")
 	 public void login_error_will_be_displayed() throws Throwable {
-	     // Write code here that turns the phrase above into concrete actions
-	     throw new PendingException();
+		 Thread.sleep(1000);
+		 driver.findElement(By.xpath("//*[text()='Datos incorrectos']"));
+		 driver.quit();
 	 }
-
- 
-	@When("^accessing to dashboard$")
-	public void accessing_to_dashboard() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new PendingException();
-	}
-
-	@Then("^logout back to urlRegistration$")
-	public void logout_back_to_urlRegistration() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new PendingException();
-	}
-
-	//
-	@When("^fill any of above fields with already existing user info$")
-	public void fill_any_of_above_fields_with_already_existing_user_info() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new PendingException();
-	}
-
-	@Then("^an error will be displayed$")
-	public void an_error_will_be_displayed() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new PendingException();
-	}
-
-
-	@When("^fill any of above fields not valid/expected data$")
-	public void fill_any_of_above_fields_not_valid_expected_data() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new PendingException();
-	}
-
-
-
+	 
+	//Access_common_click
+	 @Then("^I click on Access button$")
+	 public void I_click_on_Access_button() throws Throwable {
+		 driver.findElement(By.xpath("//*[@id=\"login-submit\"]")).click();	
+	 }
 	
 
-	@Given("^a previously registered user$")
-	public void a_previously_registered_user() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new PendingException();
-	}
+}
+	 
+	//Here I tried to create a global error validation step for all the errors present on this suite. However I was not able to make it run properly by adding some kind of OR to the findElement call. So I decide to separate them for each specific case.	 
+	/* @Then("^an error will be displayed$")
+	 public void an_error_will_be_displayed() throws Throwable {
+		 Thread.sleep(1000);
+		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-error-msg\"]"))); First try capturing error xpath. I end up using expected error message instead as seen below.		
+		//driver.findElement(By.xpath("//*[text()='Client already exists']" | "//*[text()='Please select an item in the list.']" | "//*[text()='Please fill in this field.']" | "//*[text()='Please include an ‘@‘ in the email address.']" | "//*[text()='Please tick this box if you want to proceed.']"));
+		 
+		 driver.quit();
+		}*/
+	 
+	 
+/*Here, after the above @Then("^an error will be displayed$") was not working, I tried to separate all of the errors present and just create a specific error validation for each one.
+However, some of the errors were still not traceable as a web components. So I reject this idea due to time constrains and not enough technical knownledge of the web itself.	 
+*/	 
+	 
+/*Registration_KO_notValidData
+	 @When("^I dont fill up the \"([^\"]*)\", \"([^\"]*)\" or  \"([^\"]*)\" field$")
+	 public void i_dont_fill_up_the_or_field(String email, String password, String phoneNumber) throws Throwable {
+		 driver.findElement(By.xpath("//*[@id=\"register-email\"]")).clear(); //email field
+			driver.findElement(By.xpath("//*[@id=\"register-email\"]")).sendKeys(email); //email field
+			
+			driver.findElement(By.xpath("//*[@id=\"register-password\"]")).clear(); //password field
+			driver.findElement(By.xpath("//*[@id=\"register-password\"]")).sendKeys(password); //password field
+			
+			driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).clear(); //phoneNumber field
+			driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).sendKeys(phoneNumber); //phoneNumber field;
+	 }
 
-	@When("^navigating to https://pro\\.packlink\\.es/login WITH credentials <email> and random <password>$")
-	public void navigating_to_https_pro_packlink_es_login_WITH_credentials_email_and_random_password() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new PendingException();
-	}
-	@Then("^it will land into the platform dashboard$")
-	public void it_will_land_into_the_platform_dashboard() {}
-	    // Write code here that turns the phrase above into concrete actions
-	    
-	}
+	 @Then("^I dont select a value in the monthly field$")
+	 public void i_dont_select_a_value_in_the_monthly_field() throws Throwable {
+			//MONTHLY field
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/fieldset/div[2]/label")));
+	 }
+
+	 @Then("^I dont select a value in marketplace field$")
+	 public void i_dont_select_a_value_in_marketplace_field() throws Throwable {
+		
+			//MARKETPLACE
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/fieldset/div[3]/label")));
+			 }
+
+	 @Then("^I dont select a value in onlinePlatform field$")
+	 public void i_dont_select_a_value_in_onlinePlatform_field() throws Throwable {
+		
+			//ONLINE PLATFORM field
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/fieldset/div[4]/label")));
+			
+	 }
+
+	 @Then("^I dont click on terms&conditions field$")
+	 public void i_dont_click_on_terms_conditions_field() throws Throwable {
+	
+			//TERMS&CONDITIONS field
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/div[3]/label")));
+	 }
+
+	 @Then("^I dont click on privacyPolicy field$")
+	 public void i_dont_click_on_privacyPolicy_field() throws Throwable {
+
+			//PRIVACY POLICY field
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/div[4]/label")));
+	 }
+	 
 
 
+	 @Then("^an Please fill in this field\\. error will be displayed$")
+	 public void an_Please_fill_in_this_field_error_will_be_displayed() throws Throwable {
+		 Thread.sleep(1000);
+		 driver.findElement(By.xpath("//*[text()='Please fill in this field.']"));
+		 driver.quit();
+	 }
+
+	 @Then("^an error Please select an item in the list\\. will be displayed$")
+	 public void an_error_Please_select_an_item_in_the_list_will_be_displayed() throws Throwable {
+		 Thread.sleep(1000);
+		 driver.findElement(By.xpath("//*[text()='Please select an item in the list.']"));
+		 driver.quit();
+	 }
+	 
+	 @Then("^an error Please tick this box if you want to proceed\\. will be displayed$")
+	 public void an_error_Please_tick_this_box_if_you_want_to_proceed_will_be_displayed() throws Throwable {
+		 Thread.sleep(1000);
+		 driver.findElement(By.xpath("//*[text()='Please tick this box if you want to proceed.']"));
+		 driver.quit();
+	 }
+*/
+	
+	 
