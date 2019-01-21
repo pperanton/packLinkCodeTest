@@ -28,8 +28,8 @@ Feature: Register
 
     Examples: 
       | email                         | password | phoneNumber |
-      | qacandidateppo110@packlink.es |   123456 |   999999999 |
-			| qacandidateppo111@packlink.es |   123456 |   999999999 |
+      | qacandidateppo200@packlink.es |   123456 |   999999999 |
+			| qacandidateppo201@packlink.es |   123456 |   999999999 |
   
   
   

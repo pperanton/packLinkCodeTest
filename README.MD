@@ -26,6 +26,24 @@ Note: installing webDrivers won't be needed are they are loaded from lib/drivers
 Note: JDK version used in this project: jdk1.8.0_121.jdk
 ```
 
+### Supported OS
+
+This project was build on a Mac OS, so the ChromeDriver it is set by default to the Mac one. In order to run it on other OS, please modify the following lines from _configuration.properties_ file under src/config/ folder:
+
+```
+# Mac ChromeDriver
+ChromeDriverPath = lib/drivers/chromedriver
+
+# Linux ChromeDriver
+#ChromeDriverPath = lib/drivers/chromedriverlinux
+
+# Windows ChromeDriver 
+#ChromeDriverPath = lib/drivers/chromedriver.exe
+```
+
+Comment and uncomment depending on your OS. Please note that this has not been tested properly.
+
+
 ## KNOWN ISSUES / AREAS TO IMPROVE
 
 ### Known Issues
