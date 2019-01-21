@@ -15,9 +15,9 @@ In order to run this test suite, follow the instructions below:
 1. Download the repository to local.
 2. Using an IDE (Eclipse or Netbeans) load it to the project list.
 3. Add all the jars contained in lib/jars/ to the project. To do so:
-3.1. Right-click on the project name on IDE.
-3.2. Properties > Java Build Path > Libraries > Add external JARs...
-3.3. Then select the jar files contained in lib/jars/
+  - Right-click on the project name on IDE.
+  - Properties > Java Build Path > Libraries > Add external JARs...
+  - Then select the jar files contained in lib/jars/
 
 4. Use the testRunner.java to `Run As` a JUnit Test.
 5. You can uncomment the tags value on testRunner.java file and add any of the Features needed.
