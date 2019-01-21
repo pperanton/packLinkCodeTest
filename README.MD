@@ -23,6 +23,7 @@ In order to run this test suite, follow the instructions below:
 
 ```
 Note: installing webDrivers won't be needed are they are loaded from lib/drivers/ folder.
+Note: JDK version used in this project: jdk1.8.0_121.jdk
 ```
 
 ## KNOWN ISSUES / AREAS TO IMPROVE
