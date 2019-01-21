@@ -16,7 +16,7 @@ Feature: Register
 
   @Registration_OK
   Scenario Outline: User registration
-    When going to https://pro.packlink.es/registro
+		When going to https://pro.packlink.es/registro
     Then fill up the "<email>", "<password>" and  "<phoneNumber>" field
     And select a value in the monthly field
     And select a value in marketplace field
@@ -28,11 +28,8 @@ Feature: Register
 
     Examples: 
       | email                         | password | phoneNumber |
-      | qacandidateppo104@packlink.es |   123456 |   999999999 |
-			| qacandidateppo105@packlink.es |   123456 |   999999999 |
-  #| qacandidateppo3@packlink.es | 123456 | 999999999 |
-  #| qacandidateppo4@packlink.es | 123456 | 999999999 |
-  #| qacandidateppo5@packlink.es | 123456 | 999999999 |
+      | qacandidateppo110@packlink.es |   123456 |   999999999 |
+			| qacandidateppo111@packlink.es |   123456 |   999999999 |
   
   
   
@@ -78,7 +75,7 @@ Feature: Register
 #To create a proper test suite for this required/not valid data I would need more time and requirements to identify the expected
   #lenght of each field, and the accepted values for them. Then create a suite to test those possible outcomes.
   #For the time being I will focus only on empty field data and mail address validation.
-  #Update, as described on Register.java code, I reject this Scenarios due to some of the error warnings were not traceable as web components.
+  #Update: as described on Register.java code, I reject this Scenarios due to some of the error warnings were not traceable as web components.
   
   #@Registration_KO_notinputValidData
   #Scenario Outline: User registration with no input on email, password or phonenumber

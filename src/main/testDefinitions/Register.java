@@ -4,196 +4,256 @@ import java.util.Properties;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import cucumber.api.PendingException;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import main.dataProvider.ConfigFileReader;
 
 public class Register {
-	
-	WebDriver driver;
-	WebDriverWait wait;
-	
 	ConfigFileReader configFileReader = new ConfigFileReader();
+	WebDriverWait wait;
+	WebDriver driver;
 
-	/* 1st try to implement a Before hook. I commented it since was not working as expected and I put a Background instead.
-	@Before("@webBrowser")
-	public void openBrowser() {
-		 System.setProperty("webdriver.chrome.driver", configFileReader.getChromeDriverPath());
-		 driver = new ChromeDriver();
-		 wait=new WebDriverWait(driver,60);
-		 driver.manage().window().fullscreen();
-	}*/
-	
-	//Background open webBrowser
+	/*
+	 * 1st try to implement a Before hook. I commented it since was not working as
+	 * expected and I put a Background instead.
+	 * 
+	 * @Before("@webBrowser") public void openBrowser() {
+	 * System.setProperty("webdriver.chrome.driver",
+	 * configFileReader.getChromeDriverPath()); driver = new ChromeDriver();
+	 * wait=new WebDriverWait(driver,60); driver.manage().window().fullscreen(); }
+	 */
+
+	// Background open webBrowser
 	@Given("^any web Browser and an internet User$")
 	public void any_web_Browser_and_an_internet_User() {
 		System.setProperty("webdriver.chrome.driver", configFileReader.getChromeDriverPath());
-		 driver = new ChromeDriver();
-		 wait=new WebDriverWait(driver,60);
-		 driver.manage().window().fullscreen();
+		driver = new ChromeDriver();
+		wait = new WebDriverWait(driver, 60);
+		driver.manage().window().fullscreen();
 	}
 
+	// WebElement declaration
+	/*
+	 * I tried to declare some of the webelements to variables so I can use them in
+	 * the tests steps, but I reject it due to technical difficulties and time
+	 * constrains. I then move to declare each of them inside locals to readability
+	 * purposes. public void webElements() {
+	 * 
+	 * WebElement emailElement =
+	 * driver.findElement(By.xpath("//*[@id=\"register-email\"]")); WebElement
+	 * passwordElement =
+	 * driver.findElement(By.xpath("//*[@id=\"register-password\"]")); WebElement
+	 * phoneElement = driver.findElement(By.xpath("//*[@id=\\\"register-tel\\\"]"));
+	 * WebElement shipmentElement =
+	 * driver.findElement(By.xpath("//*[@id=\"register-shipments\"]")); WebElement
+	 * marketplaceElement =
+	 * driver.findElement(By.xpath("//*[@id=\"register-platform\"]")); WebElement
+	 * onlinePlatformElement =
+	 * driver.findElement(By.xpath("//*[@id=\"register-ecommerce\"]")); WebElement
+	 * termsConditionsElement =
+	 * driver.findElement(By.xpath("//*[@id=\"register-termsAndConditions\"]"));
+	 * WebElement privacyPolicyElement =
+	 * driver.findElement(By.xpath("//*[@id=\"register-dataProcessing\"]"));
+	 * WebElement registerSubmitButtonElement =
+	 * driver.findElement(By.xpath("//*[@id=\"register-submit\"]"));
+	 * 
+	 * 
+	 * WebElement emailLoginElement =
+	 * driver.findElement(By.xpath("//*[@id=\"login-email\"]")); WebElement
+	 * passwordLoginElement =
+	 * driver.findElement(By.xpath("//*[@id=\"login-password\"]")); }
+	 */
 
-	//URL&Form scenario
+	// URL&Form scenario
 	@When("^going to urlRegister$")
 	public void going_to_urlRegister() {
 		driver.get(configFileReader.getApplicationUrlregister());
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-submit\"]")));
-	
+
 	}
 
 	@Then("^I will validate registration form with (\\d+) required fields$")
 	public void i_will_validate_registration_form_with_required_fields(int arg1) {
-		//EMAIL field
+
+		// EMAIL field
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-email\"]")));
-		//PASSWORD field
+		// PASSWORD field
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-password\"]")));
-		//PHONENUMBER field
+		// PHONENUMBER field
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-tel\"]")));
-		//MONTHLY field
+		// MONTHLY field
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/fieldset/div[2]/label")));
-		//MARKETPLACE
+		// MARKETPLACE
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/fieldset/div[3]/label")));
-		//ONLINE PLATFORM field
+		// ONLINE PLATFORM field
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/fieldset/div[4]/label")));
-		//TERMS&CONDITIONS field
+		// TERMS&CONDITIONS field
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/div[3]/label")));
-		//PRIVACY POLICY field
+		// PRIVACY POLICY field
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-form\"]/fieldset/div[4]/label")));
-		
+
 		driver.quit();
 	}
 
-	
-	//Registration_OK
+	// Registration_OK
 	@When("^going to https://pro\\.packlink\\.es/registro$")
 	public void going_to_https_pro_packlink_es_registro() {
 		driver.get(configFileReader.getApplicationUrlregister());
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"register-submit\"]")));
-		
+
 	}
 
 	@Then("^fill up the \"([^\"]*)\", \"([^\"]*)\" and  \"([^\"]*)\" field$")
 	public void fill_up_the_and_field(String email, String password, String phoneNumber) {
-		driver.findElement(By.xpath("//*[@id=\"register-email\"]")).clear(); //email field
-		driver.findElement(By.xpath("//*[@id=\"register-email\"]")).sendKeys(email); //email field
-		
-		driver.findElement(By.xpath("//*[@id=\"register-password\"]")).clear(); //password field
-		driver.findElement(By.xpath("//*[@id=\"register-password\"]")).sendKeys(password); //password field
-		
-		driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).clear(); //phoneNumber field
-		driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).sendKeys(phoneNumber); //phoneNumber field;
+
+		WebElement emailElement = driver.findElement(By.xpath("//*[@id=\"register-email\"]"));
+		WebElement passwordElement = driver.findElement(By.xpath("//*[@id=\"register-password\"]"));
+		WebElement phoneElement = driver.findElement(By.xpath("//*[@id=\"register-tel\"]"));
+
+		emailElement.clear();
+		emailElement.sendKeys(email);
+
+		passwordElement.clear();
+		passwordElement.sendKeys(password);
+
+		phoneElement.clear();
+		phoneElement.sendKeys(phoneNumber);
+
 	}
- 
-	 @Then("^select a value in the monthly field$")
-	 public void select_a_value_in_the_monthly_field() {
-		 new Select(driver.findElement(By.xpath("//*[@id=\"register-shipments\"]"))).selectByValue("1 - 10");
-	 }
 
-	 @Then("^select a value in marketplace field$")
-	 public void select_a_value_in_marketplace_field() {
-		 new Select(driver.findElement(By.xpath("//*[@id=\"register-platform\"]"))).selectByValue("Other");
-	 }
+	@Then("^select a value in the monthly field$")
+	public void select_a_value_in_the_monthly_field() {
+		WebElement shipmentElement = driver.findElement(By.xpath("//*[@id=\"register-shipments\"]"));
 
-	 @Then("^select a value in onlinePlatform field$")
-	 public void select_a_value_in_onlinePlatform_field() {
-		 new Select(driver.findElement(By.xpath("//*[@id=\"register-ecommerce\"]"))).selectByValue("Other");
-	 }
+		new Select(shipmentElement).selectByValue("1 - 10");
+	}
 
-	 @Then("^click on terms&conditions field$")
-	 public void click_on_terms_conditions_field() {
-		 driver.findElement(By.xpath("//*[@id=\"register-termsAndConditions\"]")).click();
-	 }
+	@Then("^select a value in marketplace field$")
+	public void select_a_value_in_marketplace_field() {
+		WebElement marketplaceElement = driver.findElement(By.xpath("//*[@id=\"register-platform\"]"));
 
-	 @Then("^click on privacyPolicy field$")
-	 public void click_on_privacyPolicy_field() {
-		 driver.findElement(By.xpath("//*[@id=\"register-dataProcessing\"]")).click();
-	 }
+		new Select(marketplaceElement).selectByValue("Other");
+	}
 
-	 @Then("^complete the registration process$")
-	 public void complete_the_registration_process() throws Throwable {
-		 driver.findElement(By.xpath("//*[@id=\"register-submit\"]")).click();
-		 
-	 }
+	@Then("^select a value in onlinePlatform field$")
+	public void select_a_value_in_onlinePlatform_field() {
+		WebElement onlinePlatformElement = driver.findElement(By.xpath("//*[@id=\"register-ecommerce\"]"));
 
-	 @Then("^validate dashboard is accesible$")
-	 public void validate_dashboard_is_accesible() throws Throwable { 
-		Thread.sleep(5000);
-		driver.findElement(By.xpath("/html/body/div[1]/main-app/div[1]/app-header/header/h1/a"));
+		new Select(onlinePlatformElement).selectByValue("Other");
+	}
+
+	@Then("^click on terms&conditions field$")
+	public void click_on_terms_conditions_field() {
+		WebElement termsConditionsElement = driver.findElement(By.xpath("//*[@id=\"register-termsAndConditions\"]"));
+
+		termsConditionsElement.click();
+	}
+
+	@Then("^click on privacyPolicy field$")
+	public void click_on_privacyPolicy_field() {
+		WebElement privacyPolicyElement = driver.findElement(By.xpath("//*[@id=\"register-dataProcessing\"]"));
+
+		privacyPolicyElement.click();
+	}
+
+	@Then("^complete the registration process$")
+	public void complete_the_registration_process() throws Throwable {
+		WebElement registerSubmitButtonElement = driver.findElement(By.xpath("//*[@id=\"register-submit\"]"));
+
+		registerSubmitButtonElement.click();
+
+	}
+
+	@Then("^validate dashboard is accesible$")
+	public void validate_dashboard_is_accesible() throws Throwable {
+		Thread.sleep(10000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]/main-app/div[1]/app-header/header/h1/a")));
 		Thread.sleep(10000);
 		driver.quit();
-	 }
+	}
 
-	 //Registration_KO_existingUser
-	 
-	 @Then("^fill up the email, password and  phoneNumber field with existing data$")
-	 public void fill_up_the_and_field_with_existing_data() throws Throwable {
-		 
-		 	driver.findElement(By.xpath("//*[@id=\"register-email\"]")).clear(); //email field
-			driver.findElement(By.xpath("//*[@id=\"register-email\"]")).sendKeys(configFileReader.getplProUser());//email field
-			
-			driver.findElement(By.xpath("//*[@id=\"register-password\"]")).clear(); //password field
-			driver.findElement(By.xpath("//*[@id=\"register-password\"]")).sendKeys(configFileReader.getplProPassword()); //password field
-			
-			driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).clear(); //phoneNumber field
-			driver.findElement(By.xpath("//*[@id=\"register-tel\"]")).sendKeys("123456"); //phoneNumber field;
-	 }
-	 
-	 @Then("^an Already exists error will be displayed$")
-	 public void an_Already_exists_error_will_be_displayed() throws Throwable {
-		 Thread.sleep(2000);
-		 driver.findElement(By.xpath("//*[text()='Client already exists']"));
-		 driver.quit();
-	 }
+	// Registration_KO_existingUser
 
-	 //Access_OK
-	 @Given("^navigating to https://pro\\.packlink\\.es/login$")
-	 public void navigating_to_https_pro_packlink_es_login() throws Throwable {
-			driver.get(configFileReader.getApplicationUrlHome());
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"login-form\"]/fieldset/legend")));
+	@Then("^fill up the email, password and  phoneNumber field with existing data$")
+	public void fill_up_the_and_field_with_existing_data() throws Throwable {
+		WebElement emailElement = driver.findElement(By.xpath("//*[@id=\"register-email\"]"));
+		WebElement passwordElement = driver.findElement(By.xpath("//*[@id=\"register-password\"]"));
+		WebElement phoneElement = driver.findElement(By.xpath("//*[@id=\"register-tel\"]"));
 
-	 }
+		emailElement.clear();
+		emailElement.sendKeys(configFileReader.getplProUser());
 
-	 @Then("^I use existing data for credentials$")
-	 public void i_use_existing_data_for_credentials() throws Throwable {
-		 
-		 	driver.findElement(By.xpath("//*[@id=\"login-email\"]")).clear(); //email field
-			driver.findElement(By.xpath("//*[@id=\"login-email\"]")).sendKeys(configFileReader.getplProUser());//email field
-			
-			driver.findElement(By.xpath("//*[@id=\"login-password\"]")).clear(); //password field
-			driver.findElement(By.xpath("//*[@id=\"login-password\"]")).sendKeys(configFileReader.getplProPassword()); //password field
-	 }
+		passwordElement.clear();
+		passwordElement.sendKeys(configFileReader.getplProPassword());
 
-	//Access_KO
-	 @Then("^I enter not existing credentials email and incorrect password$")
-	 public void i_enter_not_existing_credentials_email_and_incorrect_password() throws Throwable {
-			driver.findElement(By.xpath("//*[@id=\"login-email\"]")).clear(); //email field
-			driver.findElement(By.xpath("//*[@id=\"login-email\"]")).sendKeys("qacandidate@packlink.es");//email field
-			
-			driver.findElement(By.xpath("//*[@id=\"login-password\"]")).clear(); //password field
-			driver.findElement(By.xpath("//*[@id=\"login-password\"]")).sendKeys("2222222222"); //password field
-	 }
-	 
-	 @Then("^login error will be displayed$")
-	 public void login_error_will_be_displayed() throws Throwable {
-		 Thread.sleep(1000);
-		 driver.findElement(By.xpath("//*[text()='Datos incorrectos']"));
-		 driver.quit();
-	 }
-	 
-	//Access_common_click
-	 @Then("^I click on Access button$")
-	 public void I_click_on_Access_button() throws Throwable {
-		 driver.findElement(By.xpath("//*[@id=\"login-submit\"]")).click();	
-	 }
-	
+		phoneElement.clear();
+		phoneElement.sendKeys("123456");
+
+	}
+
+	@Then("^an Already exists error will be displayed$")
+	public void an_Already_exists_error_will_be_displayed() throws Throwable {
+		Thread.sleep(2000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[text()='Client already exists']")));
+		driver.quit();
+	}
+
+	// Access_OK
+	@Given("^navigating to https://pro\\.packlink\\.es/login$")
+	public void navigating_to_https_pro_packlink_es_login() throws Throwable {
+		driver.get(configFileReader.getApplicationUrlHome());
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"login-form\"]/fieldset/legend")));
+
+	}
+
+	@Then("^I use existing data for credentials$")
+	public void i_use_existing_data_for_credentials() throws Throwable {
+		WebElement emailLoginElement = driver.findElement(By.xpath("//*[@id=\"login-email\"]"));
+		WebElement passwordLoginElement = driver.findElement(By.xpath("//*[@id=\"login-password\"]"));
+
+		emailLoginElement.clear(); // email field
+		emailLoginElement.sendKeys(configFileReader.getplProUser());// email field
+
+		passwordLoginElement.clear(); // password field
+		passwordLoginElement.sendKeys(configFileReader.getplProPassword()); // password field
+	}
+
+	// Access_KO
+	@Then("^I enter not existing credentials email and incorrect password$")
+	public void i_enter_not_existing_credentials_email_and_incorrect_password() throws Throwable {
+		WebElement emailLoginElement = driver.findElement(By.xpath("//*[@id=\"login-email\"]"));
+		WebElement passwordLoginElement = driver.findElement(By.xpath("//*[@id=\"login-password\"]"));
+
+		emailLoginElement.clear(); // email field
+		emailLoginElement.sendKeys("qacandidate@packlink.es");// email field
+
+		passwordLoginElement.clear(); // password field
+		passwordLoginElement.sendKeys("2222222222"); // password field
+	}
+
+	@Then("^login error will be displayed$")
+	public void login_error_will_be_displayed() throws Throwable {
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//*[text()='Datos incorrectos']"));
+		driver.quit();
+	}
+
+	// Access_common_click
+	@Then("^I click on Access button$")
+	public void I_click_on_Access_button() throws Throwable {
+		WebElement LoginButtonElement = driver.findElement(By.xpath("//*[@id=\"login-submit\"]"));
+
+		LoginButtonElement.click();
+	}
 
 }
 	 
